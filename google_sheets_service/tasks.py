@@ -1,13 +1,8 @@
-from config.celery import app
+from celery import shared_task
+
 from .script import parse_table, get_table
 
 
-@app.task
-def get_table_task():
-    table = get_table()
-    return table
-
-
-@app.task
+@shared_task
 def update_table_task():
-    parse_table(get_table_task())
+    parse_table(get_table())

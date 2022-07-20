@@ -14,3 +14,6 @@ CELERY_BEAT_SCHEDULE = {
         'schedule': crontab(minute='*/1'),
     },
 }
+
+if __name__ == '__main__':
+    app.start()
