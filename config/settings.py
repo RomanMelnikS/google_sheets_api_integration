@@ -1,6 +1,8 @@
 import os
-from dotenv import load_dotenv
 from pathlib import Path
+
+from celery.schedules import crontab
+from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -107,13 +109,16 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CELERY_IMPORTS = ('google_sheets_service.tasks', )
 
+CELERY_BEAT_SCHEDULE = {
+    'update_table': {
+        'task': 'google_sheets_service.tasks.update_table_task',
+        'schedule': crontab(minute='*/1'),
+    },
+}
+
 CELERY_BROKER_URL = 'redis://redis:6379'
 
 CELERY_RESULT_BACKEND = 'redis://redis:6379'
-
-# CELERY_RESULT_BACKEND = 'django-db'
-
-# CELERY_CACHE_BACKEND = 'django-cache'
 
 CELERY_TASK_TRACK_STARTED = True
 

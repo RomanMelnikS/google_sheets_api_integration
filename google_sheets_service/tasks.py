@@ -1,6 +1,6 @@
 from celery import shared_task
 
-from .script import parse_table, get_table
+from .script import get_table, parse_table
 
 
 @shared_task

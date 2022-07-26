@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class Google_Sheets_Table(models.Model):
     number = models.IntegerField(primary_key=True)
     order_number = models.IntegerField()
@@ -8,4 +9,4 @@ class Google_Sheets_Table(models.Model):
     rub_price = models.IntegerField()
 
     def __str__(self):
-        return f'Заказы'
+        return 'Заказы'

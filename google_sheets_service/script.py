@@ -32,17 +32,24 @@ def get_table():
         print(err)
 
 
-def parse_table(table):
-    for order in table['values']:
-        date = dt.datetime.strptime(
-            order[3], DATE_FORMAT
-        ).date()
-        convert_date = str(order[3]).replace('.', '/')
+def get_valute_rate(current_date):
+    try:
+        convert_date = current_date.replace('.', '/')
         price = requests.get(f'{CBR_URL}{convert_date}', stream=True)
         tree = ET.fromstring(price.content)
         valute_price = tree.find(
             f'Valute[@ID={VALUTE_ID}]/Value'
         ).text.replace(',', '.')
+        return valute_price
+    except Exception as err:
+        print(err)
+
+
+def parse_table(table):
+    for order in table['values']:
+        date = dt.datetime.strptime(
+            order[3], DATE_FORMAT
+        ).date()
         Google_Sheets_Table.objects.update_or_create(
             number=order[0],
             defaults={
@@ -50,7 +57,7 @@ def parse_table(table):
                 'order_number': order[1],
                 'dollar_price': order[2],
                 'delivery_time': date,
-                'rub_price': float(order[2]) * float(valute_price),
+                'rub_price': float(order[2]) * float(get_valute_rate(order[3])),
             }
         )
     print('Worked')
