@@ -9,4 +9,4 @@ python manage.py migrate
 
 gunicorn config.wsgi:application --bind 0.0.0.0 --daemon
 
-celery -A config worker -B --loglevel=info
+celery -A config worker -B --loglevel=info -f program.log
